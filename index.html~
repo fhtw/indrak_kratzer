@@ -1,5 +1,5 @@
 <form action="post.html" method="post">
     <div>
-    <button type="submit">Post</button>
+    <input type=text name=foo/>		<button type="submit">Post</button>
     </div>
 </form>

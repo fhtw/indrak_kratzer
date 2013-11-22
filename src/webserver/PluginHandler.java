@@ -1,10 +1,10 @@
 package webserver;
 
 import java.io.File;
-import java.io.FilenameFilter;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.JarURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -13,7 +13,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ServiceLoader;
-import java.net.JarURLConnection;
+import java.util.jar.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -54,17 +54,38 @@ public class PluginHandler {
          });*/
         URL[] pluginUrls = new URL[this.PluginFiles.size()];
         int i = 0;
-
+        String pluginClassName = null;
         for (File pFile : this.PluginFiles) {
             if (pFile.toString().endsWith(".jar")) {
-                System.out.println("Found plugin: " + pFile);
-                //pluginUrls[i] = pFile.toURI().toURL();
-                String jarURL = "jar:" + pFile.toURI().toURL() + "!/";
-                pluginUrls[i] = new URL(jarURL);
+                if (pFile.exists() && pFile.isFile() && pFile.canRead()) {
+                    JarInputStream jStream = null;
+                    try {
+                        System.out.println("JAR File found: " + pFile);
+                        jStream = new JarInputStream(new FileInputStream(pFile));
+                        JarEntry pluginEntry = null;
+                        while ((pluginEntry = jStream.getNextJarEntry()) != null) {
+                            System.out.println(pluginEntry);
+                            if (pluginEntry.toString().endsWith(".class")) {
+                                pluginClassName = pluginEntry.toString().substring(pluginEntry.toString().indexOf("/"), pluginEntry.toString().length());
+                            }
+                        }
+                    } catch (IOException ex) {
+                        Logger.getLogger(PluginHandler.class.getName()).log(Level.SEVERE, null, ex);
+                    } finally {
+                        try {
+                            jStream.close();
+                        } catch (IOException ex) {
+                            Logger.getLogger(PluginHandler.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+
+                //String jarURL = "jar:" + pFile.toURI().toURL() + "!/";
+                //pluginUrls[i] = new URL(jarURL);
                 i++;
             }
         }
-        URLClassLoader ucl = new URLClassLoader(pluginUrls, this.getClass().getClassLoader());
+        //URLClassLoader ucl = new URLClassLoader(pluginUrls, this.getClass().getClassLoader());
 
     }
 
