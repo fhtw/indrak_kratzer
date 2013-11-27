@@ -6,18 +6,20 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Iterator;
+import java.util.List;
 import java.util.ServiceLoader;
+import java.util.Vector;
 
 public class PluginHandler {
     private ServiceLoader<PluginControl> plugins;
     private Iterator<PluginControl> currentPlugin;
-    
+ 
 
-    public void boot() throws Exception {
-        bootPlugins();
+    public void init() throws Exception {
+        initPlugins();
     }
 
-    void bootPlugins() throws MalformedURLException {
+    void initPlugins() throws MalformedURLException {
         File loc = new File("plugins");
 
         File[] flist = loc.listFiles(new FileFilter() {
@@ -31,7 +33,7 @@ public class PluginHandler {
             plugins = ServiceLoader.load(PluginControl.class, ucl);
             currentPlugin = plugins.iterator();
             while (currentPlugin.hasNext()){
-                currentPlugin.next().start();
+                currentPlugin.next().init();
             }
         
     }

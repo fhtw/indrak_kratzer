@@ -17,8 +17,9 @@ class Client extends Thread {
     // sobald Datenübertragung durchgeführt wurde, wird die Verbindung geschlossen
     public void run() {
         RequestHandler reqHandle = new RequestHandler(socket);
-        UrlHandler urlHandle = new UrlHandler(reqHandle.getUnpreparedUrl());        
-        ResponseHandler httpResp = new ResponseHandler(socket, urlHandle.getUrl(), urlHandle.getMimeType(), reqHandle.getMethod(), reqHandle.getStandard(), reqHandle.getBody());
+        
+        //to-do: request Klasse anpassen
+        //ResponseHandler httpResp = new ResponseHandler(socket, urlHandle.getUrl(), urlHandle.getMimeType(), reqHandle.getMethod(), reqHandle.getStandard(), reqHandle.getBody());
         
         
         

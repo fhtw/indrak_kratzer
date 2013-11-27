@@ -9,7 +9,7 @@ public class ResponseHandler {
 
     ResponseHandler(Socket socket, String filename, String mimetype, String method, String standard, String body) {
         System.out.println(new Date() + " | Method: " + method + " | Standard: " + standard 
-                         + " | File: " + filename + " | mimeType: " + mimetype + "\n" + body + "\n\n");
+                         + " | File: " + filename + " | mimeType: " + mimetype + "\n Post-Attributes: " + body + "\n\n");
         try {
             PrintStream servOut = new PrintStream(new BufferedOutputStream(
                     socket.getOutputStream()));

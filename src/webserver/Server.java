@@ -14,7 +14,7 @@ public class Server {
     public static void main(String[] args) throws IOException, Exception {
 
         
-        new PluginHandler().boot();
+        new PluginHandler().init();
     
         
         /*

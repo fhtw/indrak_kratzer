@@ -2,15 +2,15 @@ package webserver.plugins;
 
 import webserver.PluginControl;
 
-public class StaticFileSystem implements PluginControl{
+public class GetTemperature implements PluginControl{
     @Override
     public void init() {
-        System.out.println("Init StaticFileSystem");
+        System.out.println("Init GetTemperature");
     }
     
     @Override
     public void start() {
-        System.out.println("Starte StaticFileSystem");
+        System.out.println("Starte GetTemperature");
     }
     
     @Override

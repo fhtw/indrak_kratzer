@@ -11,8 +11,13 @@ public class RequestHandler {
     private String body;
     private String standard;
     private int contentLength;
+    private String pluginName;
+    private boolean plugin;
+    UrlHandler urlHandle;
 
     RequestHandler(Socket socket) {
+        pluginName = "";
+        plugin = false;
         url = "";
         method = "";
         standard = "";
@@ -41,33 +46,42 @@ public class RequestHandler {
                         method = st.nextToken();
                         url = st.nextToken();
                         standard = st.nextToken();
+                        urlHandle = new UrlHandler(url, method);
+                        
+                        System.out.println("Plugin-Request: " + urlHandle.getPluginName());
+                        
                     } else {
                         throw new FileNotFoundException();
                     }
-
-                    String getHeader = "";
-                    String cLength = "";
-                    int i = 0;
-                    do {
-                        getHeader = clientOut.readLine();
-                        if (getHeader.contains("Content-Length:")) {
-                            cLength = getHeader;
-                        }
-                        System.out.println(getHeader);
-                    } while (!getHeader.isEmpty());
-
-                    if (!cLength.isEmpty()) {
-                        int tempStart = cLength.indexOf(": ")+2;
-                        int tempEnd = cLength.length();
-                        String temp = cLength.substring(tempStart, tempEnd);
-                        this.contentLength = Integer.parseInt(temp);
+                    
+                    if (method.equalsIgnoreCase("GET"))
+                    {
                         
-                        while (i < this.contentLength) {
-                            body += (char) clientOut.read();
-                            i++;
+                    } else if (method.equalsIgnoreCase("POST"))
+                    {
+                        String getHeader = "";
+                        String cLength = "";
+                        int i = 0;
+                        do {
+                            getHeader = clientOut.readLine();
+                            if (getHeader.contains("Content-Length:")) {
+                                cLength = getHeader;
+                            }
+                            System.out.println(getHeader);
+                        } while (!getHeader.isEmpty());
+
+                        if (!cLength.isEmpty()) {
+                            int tempStart = cLength.indexOf(": ")+2;
+                            int tempEnd = cLength.length();
+                            String temp = cLength.substring(tempStart, tempEnd);
+                            this.contentLength = Integer.parseInt(temp);
+
+                            while (i < this.contentLength) {
+                                body += (char) clientOut.read();
+                                i++;
+                            }
+                            //body = URLDecoder.decode(body, "UTF-8");
                         }
-                        body = URLDecoder.decode(body, "UTF-8");
-                        
                     }
 
                 }
