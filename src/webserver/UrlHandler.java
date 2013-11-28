@@ -8,7 +8,7 @@ public class UrlHandler {
 
     private String url;
     private String mimeType;
-    private String pluginName;
+    private String pluginCandidate;
     Map<String, List<String>> attributeList;
  
 
@@ -28,16 +28,12 @@ public class UrlHandler {
                 }
             }
         }
-        pluginName = obtainPluginName(incUrl);
+        pluginCandidate = obtainPluginCandidate(incUrl);
         url = prepareUrl(incUrl);
 
         // Methode obtainMimeType versucht den MimeType anhand der Dateiendung zu ermitteln
         mimeType = obtainMimeType(url);
 
-    }
-    
-    public String getPluginName() {
-        return this.pluginName;
     }
 
   
@@ -63,13 +59,11 @@ public class UrlHandler {
                     values.add(value);
                 }
             }
-
             return params;
         } catch (UnsupportedEncodingException ex) {
             throw new AssertionError(ex);
         }
     }
-    
     
     
     public static String prepareUrl(String url) {
@@ -89,15 +83,13 @@ public class UrlHandler {
         return url;
     }
     
-    public static String obtainPluginName(String url)
+    public static String obtainPluginCandidate(String url)
     {
         StringTokenizer st = new StringTokenizer(url, "/");
-        if (st.countTokens() >= 1) {
-            String stString = st.nextToken();
-            if (stString.equalsIgnoreCase("StaticFileSystem") || stString.equalsIgnoreCase("GetTemparature"))
-                return stString;
-        }
-    return "none";
+        if (st.countTokens() >= 1)
+            return st.nextToken();
+        return "none";
+
     }
 
     public static String obtainMimeType(String name) {
@@ -115,6 +107,10 @@ public class UrlHandler {
             return "text/plain";
         }
     }
+    
+    public String getPluginCandidate() {
+        return this.pluginCandidate;
+    }
 
     public String getMimeType() {
         return this.mimeType;
@@ -123,5 +119,5 @@ public class UrlHandler {
     public String getUrl() {
         return this.url;
     }
-
+ 
 }

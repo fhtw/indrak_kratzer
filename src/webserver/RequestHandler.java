@@ -12,12 +12,12 @@ public class RequestHandler {
     private String standard;
     private int contentLength;
     private String pluginName;
-    private boolean plugin;
+    private boolean pluginUse;
     UrlHandler urlHandle;
 
-    RequestHandler(Socket socket) {
+    RequestHandler(Socket socket, List<String> availablePlugins) {
         pluginName = "";
-        plugin = false;
+        pluginUse = false;
         url = "";
         method = "";
         standard = "";
@@ -47,18 +47,20 @@ public class RequestHandler {
                         url = st.nextToken();
                         standard = st.nextToken();
                         urlHandle = new UrlHandler(url, method);
-                        
-                        System.out.println("Plugin-Request: " + urlHandle.getPluginName());
-                        
+
+                        Iterator<String> it = availablePlugins.iterator();
+                        while (it.hasNext()) {
+                            if (urlHandle.getPluginCandidate().equalsIgnoreCase(it.next().toString())) {
+                                pluginUse = true;
+                                this.pluginName = urlHandle.getPluginCandidate();
+                            }
+                        }
                     } else {
                         throw new FileNotFoundException();
                     }
-                    
-                    if (method.equalsIgnoreCase("GET"))
-                    {
-                        
-                    } else if (method.equalsIgnoreCase("POST"))
-                    {
+
+                    if (method.equalsIgnoreCase("GET")) {
+                    } else if (method.equalsIgnoreCase("POST")) {
                         String getHeader = "";
                         String cLength = "";
                         int i = 0;
@@ -71,7 +73,7 @@ public class RequestHandler {
                         } while (!getHeader.isEmpty());
 
                         if (!cLength.isEmpty()) {
-                            int tempStart = cLength.indexOf(": ")+2;
+                            int tempStart = cLength.indexOf(": ") + 2;
                             int tempEnd = cLength.length();
                             String temp = cLength.substring(tempStart, tempEnd);
                             this.contentLength = Integer.parseInt(temp);
@@ -106,5 +108,13 @@ public class RequestHandler {
 
     public String getStandard() {
         return this.standard;
+    }
+
+    public boolean getPluginCheck() {
+        return this.pluginUse;
+    }
+
+    public String getPlugin() {
+        return this.pluginName;
     }
 }

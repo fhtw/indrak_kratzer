@@ -12,11 +12,7 @@ public class Server {
  
 
     public static void main(String[] args) throws IOException, Exception {
-
-        
-        new PluginHandler().init();
-    
-        
+ 
         /*
          if (args.length != 1) {
          System.out.println("Usage: java <port>");
