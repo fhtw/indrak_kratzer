@@ -55,10 +55,10 @@ public class RequestHandler {
                             if (urlHandle.getPluginCandidate().equalsIgnoreCase(it.next().toString())) {
                                 pluginUse = true;
                                 this.pluginName = urlHandle.getPluginCandidate();
-                                //urlHandle.urlRemPlugin();
+                                urlHandle.urlRemPlugin();
                             }
                         }
-                        //this.url = urlHandle.getUrl();
+                        this.url = urlHandle.getUrl();
                     } else {
                         throw new FileNotFoundException();
                     }

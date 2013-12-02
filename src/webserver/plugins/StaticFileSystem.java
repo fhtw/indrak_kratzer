@@ -36,8 +36,10 @@ public class StaticFileSystem implements PluginControl {
                         + "</style>");
                 // HTTP error 404 File Not Found via try/catch FileNotFoundException
  
-                this.path = incUrl;
-                
+                this.path = ".";
+                if ((!incUrl.isEmpty()) && (incUrl != null))
+                    this.path = incUrl;
+
                 File folder = new File(path);
                 File[] listOfFiles = folder.listFiles();
 

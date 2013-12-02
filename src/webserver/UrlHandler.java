@@ -86,8 +86,8 @@ public class UrlHandler {
     {
         String subStr = this.url.substring(this.pluginCandidate.length());
         if (subStr.startsWith("/"))
-            this.url = this.url.substring(this.pluginCandidate.length()+1);
-        else this.url = this.url.substring(this.pluginCandidate.length());
+            this.url = prepareUrl(this.url.substring(this.pluginCandidate.length()+1));
+        else this.url = prepareUrl(this.url.substring(this.pluginCandidate.length()));
     }
  
 }
