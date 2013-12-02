@@ -14,6 +14,7 @@ public class RequestHandler {
     private String pluginName;
     private boolean pluginUse;
     UrlHandler urlHandle;
+    Map<String, List<String>> attributeList;
 
     RequestHandler(Socket socket, List<String> availablePlugins) {
         pluginName = "";
@@ -53,13 +54,20 @@ public class RequestHandler {
                             if (urlHandle.getPluginCandidate().equalsIgnoreCase(it.next().toString())) {
                                 pluginUse = true;
                                 this.pluginName = urlHandle.getPluginCandidate();
+                                urlHandle.urlRemPlugin();
                             }
                         }
+                        this.url = urlHandle.getUrl();
                     } else {
                         throw new FileNotFoundException();
                     }
 
                     if (method.equalsIgnoreCase("GET")) {
+                        this.attributeList = urlHandle.obtainAttributes(url);
+                        if (!attributeList.isEmpty())
+                        {
+                            Set<String> keys = attributeList.keySet();
+                        }
                     } else if (method.equalsIgnoreCase("POST")) {
                         String getHeader = "";
                         String cLength = "";
@@ -85,7 +93,6 @@ public class RequestHandler {
                             //body = URLDecoder.decode(body, "UTF-8");
                         }
                     }
-
                 }
             }
 
@@ -94,7 +101,7 @@ public class RequestHandler {
         }
     }
 
-    public String getUnpreparedUrl() {
+    public String getUrl() {
         return this.url;
     }
 
@@ -116,5 +123,14 @@ public class RequestHandler {
 
     public String getPlugin() {
         return this.pluginName;
+    }
+    
+    public UrlHandler getUrlHandle()
+    {
+        return this.urlHandle;
+    }
+       
+    public Map<String, List<String>> getAttributeList() {
+        return this.attributeList;
     }
 }

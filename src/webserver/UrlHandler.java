@@ -7,37 +7,20 @@ import java.net.*;
 public class UrlHandler {
 
     private String url;
-    private String mimeType;
     private String pluginCandidate;
     Map<String, List<String>> attributeList;
  
 
     UrlHandler(String incUrl, String incMethod) {
-
-        //Methode prepareUrl bereitet Url vor (s.u.)
-        if (incMethod.equalsIgnoreCase("GET"))
-        {
-            attributeList = obtainAttributes(incUrl);
-            if (!attributeList.isEmpty())
-            {
-                Set<String> keys = attributeList.keySet();
-                System.out.println("Parsing GET-attributes:");
-                for (String key : keys)  
-                {  
-                   System.out.println("Name=" + key + ", Value=" + attributeList.get(key));   
-                }
-            }
-        }
-        pluginCandidate = obtainPluginCandidate(incUrl);
+        
         url = prepareUrl(incUrl);
+        pluginCandidate = obtainPluginCandidate(url);
 
-        // Methode obtainMimeType versucht den MimeType anhand der Dateiendung zu ermitteln
-        mimeType = obtainMimeType(url);
 
     }
 
   
-    public static Map<String, List<String>> obtainAttributes(String url) {
+    public Map<String, List<String>> obtainAttributes(String url) {
         try {
             Map<String, List<String>> params = new HashMap<String, List<String>>();
             String[] urlParts = url.split("\\?");
@@ -74,50 +57,39 @@ public class UrlHandler {
         }
         
         // wurde keine Datei angegeben -> String Konkatenation mit "index.html"
+        /*
         if (url.endsWith("/")) {
             url += "index.html";
         }
-        // Slash "/" wird mit Backslash "\" ersetzt
-        url = url.replace('/', File.separator.charAt(0));
-
+        */
+        
         return url;
     }
     
     public static String obtainPluginCandidate(String url)
     {
-        StringTokenizer st = new StringTokenizer(url, "/");
-        if (st.countTokens() >= 1)
-            return st.nextToken();
+        String [] arr = url.split("[\\W]", 2);
+        if (arr[0] != null)
+            return arr[0];
         return "none";
 
-    }
-
-    public static String obtainMimeType(String name) {
-        if (name.endsWith(".html") || name.endsWith(".htm")) {
-            return "text/html";
-        } else if (name.endsWith(".txt") || name.endsWith(".java")) {
-            return "text/plain";
-        } else if (name.endsWith(".gif")) {
-            return "image/gif";
-        } else if (name.endsWith(".class")) {
-            return "application/octet-stream";
-        } else if (name.endsWith(".jpg") || name.endsWith(".jpeg")) {
-            return "image/jpeg";
-        } else {
-            return "text/plain";
-        }
     }
     
     public String getPluginCandidate() {
         return this.pluginCandidate;
     }
 
-    public String getMimeType() {
-        return this.mimeType;
-    }
-
     public String getUrl() {
         return this.url;
+    }
+    
+    public void urlRemPlugin()
+    {
+        String subStr = this.url.substring(this.pluginCandidate.length());
+        if (subStr.startsWith("/"))
+            this.url = this.url.substring(this.pluginCandidate.length()+1);
+        else this.url = this.url.substring(this.pluginCandidate.length());
+        
     }
  
 }

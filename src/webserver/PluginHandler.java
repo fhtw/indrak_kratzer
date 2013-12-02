@@ -3,13 +3,14 @@ package webserver;
 import java.io.File;
 import java.io.FileFilter;
 import java.net.MalformedURLException;
+import java.net.Socket;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.ServiceLoader;
-import java.util.Vector;
 
 public class PluginHandler {
     private ServiceLoader<PluginControl> plugins;
@@ -29,18 +30,18 @@ public class PluginHandler {
         return pluginList;
     }
     
-    public int runPlugin(String pluginRequest)
+    public boolean runPlugin(String pluginRequest, Map<String, List<String>> incAttributes, String incUrl, Socket socket)
     {
         currentPlugin = plugins.iterator();
         while (currentPlugin.hasNext()){
             PluginControl plugin = currentPlugin.next();
             if (pluginRequest.equalsIgnoreCase(plugin.getClass().getSimpleName()))
             {
-                plugin.start();
-                return 1;
+                plugin.start(incAttributes, incUrl, socket);
+                return true;
             }
         }
-        return 0;
+        return false;
     }
 
     void initPlugins() throws MalformedURLException {

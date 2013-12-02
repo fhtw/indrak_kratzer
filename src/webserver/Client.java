@@ -1,9 +1,7 @@
 package webserver;
 
+import java.io.IOException;
 import java.net.*;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,26 +19,30 @@ class Client extends Thread {
 
     // Url und Request wird aufbereitet
     // sobald Datenübertragung durchgeführt wurde, wird die Verbindung geschlossen
+    @Override
     public void run() {
  
         PluginHandler myPlugins = new PluginHandler();
-        List<String> availablePlugins = new ArrayList<String>();
 
         try {        
             myPlugins.init();
         } catch (Exception ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
-        availablePlugins = myPlugins.getPluginList();
    
-        RequestHandler reqHandle = new RequestHandler(socket, availablePlugins);
-        if (reqHandle.getPluginCheck())
-            myPlugins.runPlugin(reqHandle.getPlugin());
-            
-        
-        //to-do: request Klasse anpassen
-        //ResponseHandler httpResp = new ResponseHandler(socket, urlHandle.getUrl(), urlHandle.getMimeType(), reqHandle.getMethod(), reqHandle.getStandard(), reqHandle.getBody());
-
+        RequestHandler reqHandle = new RequestHandler(socket, myPlugins.getPluginList());
+        if (reqHandle.getPluginCheck()) {
+            if (myPlugins.runPlugin(reqHandle.getPlugin(), reqHandle.getAttributeList(), reqHandle.getUrl(), socket))
+                System.out.println("Requested Plugin started successfully");
+            else System.out.println("Could not load plugin");
+        } else {
+            ResponseHandler respHandle = new ResponseHandler(socket);
+            try {
+                respHandle.runDefault(reqHandle.getUrl());
+            } catch (IOException ex) {
+                System.out.println("IOException: " + ex);
+            }
+        }
         
     }
 }
