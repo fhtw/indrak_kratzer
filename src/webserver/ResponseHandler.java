@@ -30,7 +30,7 @@ public class ResponseHandler {
     }
 
     public void printFileNotFound() {
-        servOut.println("HTTP/1.0 404 Not Found\r\n"
+        servOut.print("HTTP/1.0 404 Not Found\r\n"
                 + "Content-type: text/html\r\n\r\n"
                 + "<html><head></head><body>File not found</body></html>\n");
     }
