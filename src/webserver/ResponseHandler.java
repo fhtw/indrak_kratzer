@@ -59,8 +59,13 @@ public class ResponseHandler {
     }
 
     public void runDefault(String url) throws IOException {
-        startStream();
-        openFile("index.html", "text/html");
-        closeStream();
+        if (url.startsWith("GetTemperature/"))
+        {
+            System.out.println("TO DO!!");
+        } else {
+            startStream();
+            openFile("index.html", "text/html");
+            closeStream();
+        }
     }
 }
