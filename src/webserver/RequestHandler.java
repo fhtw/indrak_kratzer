@@ -48,16 +48,17 @@ public class RequestHandler {
                         url = st.nextToken();
                         standard = st.nextToken();
                         urlHandle = new UrlHandler(url, method);
+                        this.url = urlHandle.getUrl();
 
                         Iterator<String> it = availablePlugins.iterator();
                         while (it.hasNext()) {
                             if (urlHandle.getPluginCandidate().equalsIgnoreCase(it.next().toString())) {
                                 pluginUse = true;
                                 this.pluginName = urlHandle.getPluginCandidate();
-                                urlHandle.urlRemPlugin();
+                                //urlHandle.urlRemPlugin();
                             }
                         }
-                        this.url = urlHandle.getUrl();
+                        //this.url = urlHandle.getUrl();
                     } else {
                         throw new FileNotFoundException();
                     }

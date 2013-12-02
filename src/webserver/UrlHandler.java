@@ -13,8 +13,8 @@ public class UrlHandler {
 
     UrlHandler(String incUrl, String incMethod) {
         
-        url = prepareUrl(incUrl);
-        pluginCandidate = obtainPluginCandidate(url);
+        this.url = prepareUrl(incUrl);
+        pluginCandidate = obtainPluginCandidate(this.url);
 
 
     }
@@ -56,12 +56,11 @@ public class UrlHandler {
             url = url.substring(1);
         }
         
-        // wurde keine Datei angegeben -> String Konkatenation mit "index.html"
-        /*
+ 
         if (url.endsWith("/")) {
-            url += "index.html";
+            url = url.substring(0, url.length()-1);
         }
-        */
+ 
         
         return url;
     }
@@ -89,7 +88,6 @@ public class UrlHandler {
         if (subStr.startsWith("/"))
             this.url = this.url.substring(this.pluginCandidate.length()+1);
         else this.url = this.url.substring(this.pluginCandidate.length());
-        
     }
  
 }
