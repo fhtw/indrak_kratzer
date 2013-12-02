@@ -1,5 +1,168 @@
-<form action="post.html" method="post">
-    <div>
-    <input type=text name="foo" />		<button type="submit">Post</button>
-    </div>
-</form>
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <title>ServerIndrakKratzer</title>
+    <style>
+
+    * {
+    margin:0;
+    padding:0;
+    border:0;
+    outline:0;
+    vertical-align:baseline;
+    background:transparent;
+    }
+    body {
+    background:#fff;
+    color:#000;
+    font:12px Arial, Helvetica, sans-serif;
+    position:relative;
+    }
+
+    .left, .float_left  { float:left    }
+    .right, .float_right { float:right  }
+    .clear { clear:both; display:block; overflow:hidden; visibility:hidden; height:0px;}
+    .clear-left, .clear_left { clear:left; } .clear-right, .clear_right { clear:right; }
+    .hide  { display:none   } .block {display:block !important;} .inline {display:inline !important;}
+
+    a { color:#525252;  }
+    a:hover, a:focus { text-decoration:underline;}
+    a:active, a:visited { }
+
+    h1, h2, h3, h4, h5 {margin:0 0 0.5em; line-height:1.1em;}
+    h1 {    font-size:2.52em;} 
+    h2 {    font-size:1.952em;} 
+    h3 {    font-size:1.652em;} 
+    h4 {    font-size:1.452em;} 
+    h5 {    font-size:1.252em;} 
+    h6 {    font-size:1.52em;}
+
+    ul{
+    list-style:outside disc;
+    }
+    ul,ol{
+    margin:0 0 1.5em 1.5em;
+    padding:0;
+    }
+    li ul,li ol{
+    padding:0;
+    margin:0 0 1.5em 1.5em;
+    }
+
+    @charset "utf-8";
+    .col {
+    margin-left:10px; margin-right:10px;
+    display: inline;
+    overflow: hidden;
+    float: left;
+    position: relative;
+    }
+
+    .row{
+    width: 960px;
+    margin: 0 auto;
+    overflow: hidden;
+    }
+    .row .row {
+    margin: 0 -10px;
+    width: auto;
+    display: inline-block;
+    }
+
+    .col_16, .width_16   {  width:940px; }
+        header {padding-top:25px; border-bottom:1px solid #ccc; padding-bottom:20px;}
+        header .logo {font-size:3.52em;}
+        header nav ul li {float:left; margin-top:12px;}
+        header nav ul li a {display:block; padding:5px 15px; border-right:1px solid #eee; font-size:1.52em; font-family:Georgia, "Times New Roman", Times, serif; text-decoration:none;}
+        header nav ul li a:hover {background-color:#eee; border-right:1px solid #ccc; text-shadow:-1px -1px 0px #fff;}
+        header nav ul li.last a {border-right:none;}
+        
+        #styled {margin-top:20px;}
+        
+        .group {padding:5px; background-color:#eee; border:1px dashed #ccc; list-style:none; margin:0px; margin-bottom:5px;}
+        .group a {font-size:1.2em;}
+        .group p {margin-bottom:5px;}
+        .group li {margin-bottom:5px;}
+        
+        #css3 div > div {margin:0px 0px 50px 0px; padding:6px; border:1px solid #eee;}
+        #grid div {text-align:center;  }
+        #grid div > .col {border-bottom:1px solid #ccc; padding:10px 0px; outline:1px solid #eee;}
+        
+        h2 {border-bottom:1px dashed #ccc; margin-top:15px;}
+        
+        .documentation {display:block; background-color:#eee; padding:6px 13px; font-family:Georgia, "Times New Roman", Times, serif; color:#666; text-align:right; text-shadow:-1px -1px 0px #fff;}
+        
+        footer {text-align:center; color:#666; font-size:0.9em; padding:4px 0px;}
+
+    </style>
+    <!--[if IE]> <style> .report_bugs {left:0px;} </style>  <![endif]-->
+</head>
+
+<body>
+    <div class="row">
+        <header>
+            <div class="logo col_7 col">
+                ServerIndrakKratzer
+            </div><!-- logo col_7 -->
+
+            <div class="clear"></div><!-- clear -->
+        </header>
+    </div><!-- row -->
+    <!-- this section shows you most of the styled elements from the general stylesheet -->
+
+    <section class="row" id="styled">
+        <div class="col_16 col">
+            <h1 class="fontface">Welcome to our Server Application!</h1>
+
+            <h2>StaticFileSystem</h2>
+
+            <ul class="group html5">
+                <li>
+                    <a href="StaticFileSystem">Simple Static File System</a>
+
+                    <p>Funktionsbeschreibung fehlt noch...</p>
+                </li>
+            </ul>
+
+            <h2>GetTemperature</h2>
+
+            <ul class="group css3">
+                <li>
+                    <a href="GetTemperature">Temperature Tool</a>
+
+                    <p>Funktionsbeschreibung fehlt noch...</p>
+                </li>
+            </ul>
+
+            <h2>NaviSystem</h2>
+
+            <ul class="group framework">
+                <li>
+                    <a href="NaviSystem">Navigation System</a>
+
+                    <p>Funktionsbeschreibung fehlt noch...</p>
+                </li>
+            </ul>
+
+            <h2>CustomPlugin</h2>
+
+            <ul class="group blog">
+                <li>
+                    <a href="CustomPlugin">Custom Plugin</a>
+
+                    <p>Funktionsbeschreibung fehlt noch...</p>
+                </li>
+            </ul>
+        </div><!-- col_16 -->
+    </section><!-- row -->
+
+    <footer class="row">
+        <div class="col_16 col">
+            Ein Projekt von Julian-Merlin Indrak und Andreas Kratzer
+        </div>
+    </footer>
+</body>
+</html>
