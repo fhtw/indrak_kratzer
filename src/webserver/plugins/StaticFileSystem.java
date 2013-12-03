@@ -7,8 +7,6 @@ import java.net.Socket;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import webserver.PluginControl;
 import webserver.ResponseHandler;
 

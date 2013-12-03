@@ -9,17 +9,14 @@ public class UrlHandler {
     private String url;
     private String pluginCandidate;
     Map<String, List<String>> attributeList;
- 
-
-    UrlHandler(String incUrl, String incMethod) {
-        
+    
+  
+    
+    UrlHandler(String incUrl) {
         this.url = prepareUrl(incUrl);
         pluginCandidate = obtainPluginCandidate(this.url);
-
-
     }
 
-  
     public Map<String, List<String>> obtainAttributes(String url) {
         try {
             Map<String, List<String>> params = new HashMap<String, List<String>>();

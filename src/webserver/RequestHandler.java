@@ -47,7 +47,7 @@ public class RequestHandler {
                         method = st.nextToken();
                         url = st.nextToken();
                         standard = st.nextToken();
-                        urlHandle = new UrlHandler(url, method);
+                        urlHandle = new UrlHandler(url);
                         this.url = urlHandle.getUrl();
 
                         Iterator<String> it = availablePlugins.iterator();
