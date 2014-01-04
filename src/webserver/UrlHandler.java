@@ -12,9 +12,10 @@ public class UrlHandler {
     
   
     
-    UrlHandler(String incUrl) {
+    UrlHandler(String incUrl) throws UnsupportedEncodingException {
         this.url = prepareUrl(incUrl);
         pluginCandidate = obtainPluginCandidate(this.url);
+        this.url = URLDecoder.decode(this.url, "iso-8859-1");
     }
 
     public Map<String, List<String>> obtainAttributes(String url) {
@@ -86,5 +87,4 @@ public class UrlHandler {
             this.url = prepareUrl(this.url.substring(this.pluginCandidate.length()+1));
         else this.url = prepareUrl(this.url.substring(this.pluginCandidate.length()));
     }
- 
 }

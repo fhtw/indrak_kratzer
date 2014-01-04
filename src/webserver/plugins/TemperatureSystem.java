@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.locks.Lock;
 import javax.xml.parsers.ParserConfigurationException;
 import webserver.PluginControl;
 import webserver.ResponseHandler;
@@ -133,7 +134,7 @@ public class TemperatureSystem implements PluginControl {
 
                 int currentStart = Integer.parseInt(incStart);
                 int currentEnd = Integer.parseInt(incEnd);
-                int prevStart, prevEnd, nextStart, nextEnd = 0;
+                int prevStart, prevEnd, nextStart, nextEnd;
 
 
                 respHandle.printText("<table><tr>");
@@ -234,6 +235,7 @@ public class TemperatureSystem implements PluginControl {
     @Override
     public void start(Map<String, List<String>> incAttributes, String incUrl, Socket socket) {
         ResponseHandler respHandle = new ResponseHandler(socket);
+
         if (incAttributes.isEmpty()) {
             try {
                 respHandle.startStream();

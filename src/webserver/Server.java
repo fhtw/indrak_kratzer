@@ -29,6 +29,7 @@ public class Server {
                 // Warte auf Client...
                 Socket client = serverSocket.accept();
                 // ...und erzeuge dann Thread für diesen
+                System.out.println("NEW CLIENT" + client.getPort());
                 new Client(client);
             } catch (Exception e) {
                 System.out.println(e);

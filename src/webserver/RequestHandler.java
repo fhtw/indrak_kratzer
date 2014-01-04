@@ -48,8 +48,6 @@ public class RequestHandler {
                         url = st.nextToken();
                         standard = st.nextToken();
                         urlHandle = new UrlHandler(url);
-                        this.url = urlHandle.getUrl();
-
                         Iterator<String> it = availablePlugins.iterator();
                         while (it.hasNext()) {
                             if (urlHandle.getPluginCandidate().equalsIgnoreCase(it.next().toString())) {
