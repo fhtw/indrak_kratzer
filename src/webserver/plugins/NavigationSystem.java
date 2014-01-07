@@ -30,19 +30,15 @@ public class NavigationSystem implements PluginControl {
         respHandle.printText("<html><head></head><body><h1>Navigation System</h1>");
         respHandle.printText("<div id='tfheader'>"
                 + "		<form id='tfnewsearch' method='get' action='NavigationSystem' accept-charset='ISO-8859-1'>\n"
-                + "		        <h2>Map Generator: </h2> <input type='hidden' name='action=reloadMap' /> <input type='submit' value='Generator' class='tfbutton2'>\n"
-                + "		</form>\n"
+                + "		        <h2>Map Generator: </h2> <input type='hidden' name='action=reloadMap' /> <input type='submit' value='Generator' class='tfbutton2'></form>"
                 + "		<form id='tfnewsearch' method='get' action='NavigationSystem' accept-charset='ISO-8859-1'>\n"
                 + "		        <h2>Location Finder: </h2><input type='text' class='tftextinput' name='action=findLocation&loc' size='21' maxlength='120'><input type='submit' value='Search' class='tfbutton'>\n"
-                + "		</form><div class='tfclear'></div></div>");
-        respHandle.printText("</body></html>\n");
+                + "		</form><div class='tfclear'></div></div></body></html>\n");
     }
 
     private void showLocation(ResponseHandler respHandle, String location) {
         respHandle.printHeader("text/html");
-        respHandle.printText("<style>"
-                + "body {  	margin:0; 	padding:20px; 	font:13px 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, Arial, sans-serif;	} p,table, caption, td, tr, th {	margin:0;	padding:0;	font-weight:normal; text-align:left;	}p {	margin-bottom:15px;	}table {	border-collapse:collapse;	margin-bottom:15px;	width:60%;	}		caption {	text-align:left;		font-size:15px;		padding-bottom:10px;		}		table td,	table th {		padding:5px;		border:1px solid #fff;	border-width:0 1px 1px 0;		}			thead th {		background:#91c5d4;		}					thead th[colspan],		thead th[rowspan] {			background:#66a9bd;			}			tbody th,	tfoot th {		text-align:left;		background:#91c5d4;		}			tbody td,	tfoot td {		text-align:left;		background:#d5eaf0;		}			tfoot th {		background:#b0cc7f;		}			tfoot td {		background:#d7e1c5;	font-weight:bold;		}				tbody tr.odd td { 		background:#bcd9e1;		}"
-                + "</style>");
+        respHandle.printStyle(1);
         respHandle.printText("<html><head></head><body><h1>Navigation System</h1>"
                 + "<h1>Search Result:</h1>"
                 + "<table>"

@@ -6,6 +6,8 @@ import java.net.Socket;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import webserver.PluginControl;
 import webserver.ResponseHandler;
@@ -27,6 +29,32 @@ public class TemperatureSystem implements PluginControl {
         respHandle.printText("<tr><td><a href='TemperatureSystem?action=showPage&pages=1+20'>View database</a></td><td>Browse the database.</td></tr>");
         respHandle.printText("<tr><td><a href='TemperatureSystem?action=getTemperature&date=2010+10+30' target='_blank'>View XML</a></td><td>XML-Viewer for a specific date.</td></tr>");
         respHandle.printText("</tbody></table></body></html>\n");
+    }
+
+    private void createRandomEntries() {
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            String connectionUrl = "jdbc:sqlserver://localhost:1433;databaseName=TemperatureSystemDB;user=JulianL;password=Indrak";
+            Connection db = DriverManager.getConnection(connectionUrl);
+            Statement stmt = db.createStatement();
+
+            while (true) {
+                Thread.sleep(10000);
+                Random rand = new Random();
+                int randomNum = rand.nextInt((10000) + 1);
+                String sql = "INSERT INTO TemperatureTable (Temperature, Date) "
+                        + "VALUES (" + randomNum + ", DateAdd(d, ROUND(DateDiff(d, '2010-01-01', '2013-12-31')"
+                        + "* RAND(CHECKSUM(NEWID())), 0),"
+                        + "DATEADD(second,CHECKSUM(NEWID())%48000, '2010-01-01')))";
+                stmt.executeUpdate(sql);
+            }
+        } catch (ClassNotFoundException ex) {
+            System.out.println("MS JDBC Driver not installed: \n" + ex);
+        } catch (SQLException ex) {
+            System.out.println("Could not load database: \n" + ex);
+        } catch (InterruptedException ex) {
+            System.out.println("Interrupted Exception: \n" + ex);
+        }
     }
 
     private void createDatabase(ResponseHandler respHandle) {
@@ -197,12 +225,11 @@ public class TemperatureSystem implements PluginControl {
             if (!rs.isBeforeFirst()) {
                 respHandle.printText("<h1>Invalid database range. Please check the entered range and ensure that entries exist.</h1></body></html>\n");
             } else {
-
+                
                 respHandle.printText("<?xml version='1.0' encoding='utf-8'?>"
                         + "<temperatures>\n");
                 // For all selected customers
                 while (rs.next()) {
-
                     respHandle.printText("<id>" + rs.getInt("ID") + "</id>\n");
                     respHandle.printText("<temperature>" + rs.getInt("Temperature") + "</temperature>\n");
                     respHandle.printText("<date>" + rs.getDate("Date") + "</date>\n");
@@ -221,6 +248,11 @@ public class TemperatureSystem implements PluginControl {
     public void start(Map<String, List<String>> incAttributes, String incUrl, Socket socket) {
         System.out.println("Starting TemperatureSystem Plugin");
         ResponseHandler respHandle = new ResponseHandler(socket);
+        Thread t = new Thread(new Runnable() {
+            @Override public void run() {
+                createRandomEntries();
+            }
+        }); t.start();
 
         if (incAttributes.isEmpty()) {
             try {
@@ -246,10 +278,10 @@ public class TemperatureSystem implements PluginControl {
                     for (String value : entry.getValue()) {
                         switch (value) {
                             case "createDatabase":
-                         
-                                     createDatabase(respHandle);
-                          
-                                
+
+                                createDatabase(respHandle);
+
+
                                 break;
                             case "clearDatabase":
                                 clearDatabase(respHandle);
