@@ -6,7 +6,6 @@ import java.net.Socket;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.locks.Lock;
 import javax.xml.parsers.ParserConfigurationException;
 import webserver.PluginControl;
 import webserver.ResponseHandler;
@@ -16,9 +15,7 @@ public class TemperatureSystem implements PluginControl {
     private void showStarterScreen(ResponseHandler respHandle) {
         System.out.println("Plugin: no Attributes");
         respHandle.printHeader("text/html");
-        respHandle.printText("<style>"
-                + "body {  	margin:0; 	padding:20px; 	font:13px 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, Arial, sans-serif;	} p,table, caption, td, tr, th {	margin:0;	padding:0;	font-weight:normal; text-align:left;	}p {	margin-bottom:15px;	}table {	border-collapse:collapse;	margin-bottom:15px;	width:60%;	}		caption {	text-align:left;		font-size:15px;		padding-bottom:10px;		}		table td,	table th {		padding:5px;		border:1px solid #fff;	border-width:0 1px 1px 0;		}			thead th {		background:#91c5d4;		}					thead th[colspan],		thead th[rowspan] {			background:#66a9bd;			}			tbody th,	tfoot th {		text-align:left;		background:#91c5d4;		}			tbody td,	tfoot td {		text-align:left;		background:#d5eaf0;		}			tfoot th {		background:#b0cc7f;		}			tfoot td {		background:#d7e1c5;	font-weight:bold;		}				tbody tr.odd td { 		background:#bcd9e1;		}"
-                + "</style>");
+        respHandle.printStyle(1);
         respHandle.printText("<html><head></head><body><h1>Temperature System Plugin</h1>"
                 + "<h1>Available Functions:</h1>"
                 + "<table>"
@@ -114,9 +111,7 @@ public class TemperatureSystem implements PluginControl {
             ResultSet rs = stmt.executeQuery(sql);
 
             respHandle.printHeader("text/html");
-            respHandle.printText("<style>"
-                    + "body {  	margin:0; 	padding:20px; 	font:13px 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, Arial, sans-serif;	} p,table, caption, td, tr, th {	margin:0;	padding:0;	font-weight:normal; text-align:left;	}p {	margin-bottom:15px;	}table {	border-collapse:collapse;	margin-bottom:15px;	width:60%;	}		caption {	text-align:left;		font-size:15px;		padding-bottom:10px;		}		table td,	table th {		padding:5px;		border:1px solid #fff;	border-width:0 1px 1px 0;		}			thead th {		background:#91c5d4;		}					thead th[colspan],		thead th[rowspan] {			background:#66a9bd;			}			tbody th,	tfoot th {		text-align:left;		background:#91c5d4;		}			tbody td,	tfoot td {		text-align:left;		background:#d5eaf0;		}			tfoot th {		background:#b0cc7f;		}			tfoot td {		background:#d7e1c5;	font-weight:bold;		}				tbody tr.odd td { 		background:#bcd9e1;		}"
-                    + "</style>");
+            respHandle.printStyle(1);
             if (!rs.isBeforeFirst()) {
                 respHandle.printText("<h1>Invalid database range. Please check the entered range and ensure that entries exist.</h1></body></html>\n");
             } else {
@@ -223,17 +218,8 @@ public class TemperatureSystem implements PluginControl {
     }
 
     @Override
-    public void init() {
-        System.out.println("Found Plugin: TemperatureSystem");
-    }
-
-    @Override
-    public void start() {
-        System.out.println("Starte TemperatureSystem");
-    }
-
-    @Override
     public void start(Map<String, List<String>> incAttributes, String incUrl, Socket socket) {
+        System.out.println("Starting TemperatureSystem Plugin");
         ResponseHandler respHandle = new ResponseHandler(socket);
 
         if (incAttributes.isEmpty()) {
@@ -260,7 +246,10 @@ public class TemperatureSystem implements PluginControl {
                     for (String value : entry.getValue()) {
                         switch (value) {
                             case "createDatabase":
-                                createDatabase(respHandle);
+                         
+                                     createDatabase(respHandle);
+                          
+                                
                                 break;
                             case "clearDatabase":
                                 clearDatabase(respHandle);

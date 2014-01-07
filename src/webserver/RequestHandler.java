@@ -13,91 +13,94 @@ public class RequestHandler {
     private int contentLength;
     private String pluginName;
     private boolean pluginUse;
+    private Socket socket;
     UrlHandler urlHandle;
     Map<String, List<String>> attributeList;
 
-    RequestHandler(Socket socket, List<String> availablePlugins) {
+    RequestHandler(Socket socket) {
+        this.socket = socket;
+    }
+
+    public boolean processRequest(List<String> availablePlugins) throws IOException {
         pluginName = "";
         pluginUse = false;
         url = "";
         method = "";
         standard = "";
         body = "";
+        boolean blocked = false;
 
-        try {
-            BufferedReader clientOut = new BufferedReader(new InputStreamReader(
-                    socket.getInputStream()));
+        BufferedReader servIn = new BufferedReader(new InputStreamReader(
+                socket.getInputStream()));
 
-            // Erste Zeile des Client requests wird eingelesen
-            // -> Klasse StringTokenizer um String in Elemente aufzubrechen
-            String firstLine = clientOut.readLine();
+        // Erste Zeile des Client requests wird eingelesen
+        // -> Klasse StringTokenizer um String in Elemente aufzubrechen
+        String firstLine = servIn.readLine();
 
-            /*
-             * Zeile wird eingelesen, HTTP Request der Form:
-             * <METHODE> <DIRECTORY> <STANDARD>
-             * Bsp.: GET /infotext.html HTTP/1.1
-             * erster Token = request Methode
-             * Folgetoken = filename
-             * falls Token leer -> bad request
-             */
-            if (firstLine != null) {
-                if (!firstLine.isEmpty()) {
-                    StringTokenizer st = new StringTokenizer(firstLine);
-                    if (st.countTokens() > 1 && st.countTokens() <= 3) {
-                        method = st.nextToken();
-                        url = st.nextToken();
-                        standard = st.nextToken();
-                        urlHandle = new UrlHandler(url);
-                        Iterator<String> it = availablePlugins.iterator();
-                        while (it.hasNext()) {
-                            if (urlHandle.getPluginCandidate().equalsIgnoreCase(it.next().toString())) {
-                                pluginUse = true;
-                                this.pluginName = urlHandle.getPluginCandidate();
-                                urlHandle.urlRemPlugin();
-                            }
+        /*
+         * Zeile wird eingelesen, HTTP Request der Form:
+         * <METHODE> <DIRECTORY> <STANDARD>
+         * Bsp.: GET /infotext.html HTTP/1.1
+         * erster Token = request Methode
+         * Folgetoken = filename
+         * falls Token leer -> bad request
+         */
+        if ((firstLine != null) && (!blocked)) {
+            if (!firstLine.isEmpty()) {
+                StringTokenizer st = new StringTokenizer(firstLine);
+                if (st.countTokens() > 1 && st.countTokens() <= 3) {
+                    method = st.nextToken();
+                    url = st.nextToken();
+                    standard = st.nextToken();
+                    urlHandle = new UrlHandler(url);
+                    Iterator<String> it = availablePlugins.iterator();
+                    while (it.hasNext()) {
+                        if (urlHandle.getPluginCandidate().equalsIgnoreCase(it.next().toString())) {
+                            pluginUse = true;
+                            this.pluginName = urlHandle.getPluginCandidate();
+                            urlHandle.urlRemPlugin();
                         }
-                        this.url = urlHandle.getUrl();
-                    } else {
-                        throw new FileNotFoundException();
                     }
+                    this.url = urlHandle.getUrl();
+                } else {
+                    throw new FileNotFoundException();
+                }
 
-                    if (method.equalsIgnoreCase("GET")) {
-                        this.attributeList = urlHandle.obtainAttributes(url);
-                        if (!attributeList.isEmpty())
-                        {
-                            Set<String> keys = attributeList.keySet();
+                if (method.equalsIgnoreCase("GET")) {
+                    this.attributeList = urlHandle.obtainAttributes(url);
+                    if (!attributeList.isEmpty()) {
+                        Set<String> keys = attributeList.keySet();
+                    }
+                } else if (method.equalsIgnoreCase("POST")) {
+                    String getHeader = "";
+                    String cLength = "";
+                    int i = 0;
+                    do {
+                        getHeader = servIn.readLine();
+                        if (getHeader.contains("Content-Length:")) {
+                            cLength = getHeader;
                         }
-                    } else if (method.equalsIgnoreCase("POST")) {
-                        String getHeader = "";
-                        String cLength = "";
-                        int i = 0;
-                        do {
-                            getHeader = clientOut.readLine();
-                            if (getHeader.contains("Content-Length:")) {
-                                cLength = getHeader;
-                            }
-                            System.out.println(getHeader);
-                        } while (!getHeader.isEmpty());
+                        System.out.println(getHeader);
+                    } while (!getHeader.isEmpty());
 
-                        if (!cLength.isEmpty()) {
-                            int tempStart = cLength.indexOf(": ") + 2;
-                            int tempEnd = cLength.length();
-                            String temp = cLength.substring(tempStart, tempEnd);
-                            this.contentLength = Integer.parseInt(temp);
+                    if (!cLength.isEmpty()) {
+                        int tempStart = cLength.indexOf(": ") + 2;
+                        int tempEnd = cLength.length();
+                        String temp = cLength.substring(tempStart, tempEnd);
+                        this.contentLength = Integer.parseInt(temp);
 
-                            while (i < this.contentLength) {
-                                body += (char) clientOut.read();
-                                i++;
-                            }
-                            //body = URLDecoder.decode(body, "UTF-8");
+                        while (i < this.contentLength) {
+                            body += (char) servIn.read();
+                            i++;
                         }
+                        //body = URLDecoder.decode(body, "UTF-8");
                     }
                 }
             }
-
-        } catch (IOException e) {
-            System.out.println(e);
+            return true;
         }
+        System.out.println("RETURN FALSE");
+        return false;
     }
 
     public String getUrl() {
@@ -123,12 +126,11 @@ public class RequestHandler {
     public String getPlugin() {
         return this.pluginName;
     }
-    
-    public UrlHandler getUrlHandle()
-    {
+
+    public UrlHandler getUrlHandle() {
         return this.urlHandle;
     }
-       
+
     public Map<String, List<String>> getAttributeList() {
         return this.attributeList;
     }

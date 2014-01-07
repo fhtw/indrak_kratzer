@@ -15,24 +15,12 @@ public class StaticFileSystem implements PluginControl {
     private String path;
 
     @Override
-    public void init() {
-        System.out.println("Found Plugin: StaticFileSystem");
-    }
-
-    @Override
-    public void start() {
-    }
-
-    @Override
     public void start(Map<String, List<String>> incAttributes, String incUrl, Socket socket) {
         System.out.println("Starting StaticFileSystem Plugin");
         ResponseHandler respHandle = new ResponseHandler(socket);
 
         if (incAttributes.isEmpty()) {
             try {
-
-                // HTTP error 404 File Not Found via try/catch FileNotFoundException
-
                 this.path = ".";
                 if ((!incUrl.isEmpty()) && (incUrl != null)) {
                     this.path = incUrl;
@@ -46,9 +34,7 @@ public class StaticFileSystem implements PluginControl {
                 File[] listOfFiles = folder.listFiles();
                 
                 respHandle.printHeader("text/html");
-                respHandle.printText("<style>"
-                        + "body { 	margin:0; 	padding:20px; 	font:13px 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, Arial, sans-serif;	} p,table, caption, td, tr, th {	margin:0;	padding:0;	font-weight:normal;	}p {	margin-bottom:15px;	}table {	border-collapse:collapse;	margin-bottom:15px;	width:90%;	}		caption {	text-align:left;		font-size:15px;		padding-bottom:10px;		}		table td,	table th {		padding:5px;		border:1px solid #fff;	border-width:0 1px 1px 0;		}			thead th {		background:#91c5d4;		}					thead th[colspan],		thead th[rowspan] {			background:#66a9bd;			}			tbody th,	tfoot th {		text-align:left;		background:#91c5d4;		}			tbody td,	tfoot td {		text-align:center;		background:#d5eaf0;		}			tfoot th {		background:#b0cc7f;		}			tfoot td {		background:#d7e1c5;	font-weight:bold;		}				tbody tr.odd td { 		background:#bcd9e1;		}"
-                        + "</style>");
+                respHandle.printStyle(1);
                 respHandle.printText("<html><head></head><body><h1>Current folder: " + path + "</h1>"
                         + "<h1>Files:</h1>"
                         + "<table summary='Folder:'>"

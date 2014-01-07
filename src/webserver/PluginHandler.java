@@ -30,7 +30,7 @@ public class PluginHandler {
         return pluginList;
     }
     
-    public boolean runPlugin(String pluginRequest, Map<String, List<String>> incAttributes, String incUrl, Socket socket)
+    public boolean runPlugin(String pluginRequest, Map<String, List<String>> incAttributes, String incUrl, Socket socket) throws InterruptedException
     {
         currentPlugin = plugins.iterator();
         while (currentPlugin.hasNext()){
@@ -56,9 +56,5 @@ public class PluginHandler {
  
             URLClassLoader ucl = new URLClassLoader(urls);
             plugins = ServiceLoader.load(PluginControl.class, ucl);
-            currentPlugin = plugins.iterator();
-            while (currentPlugin.hasNext()){
-                currentPlugin.next().init();
-            }
     }
 }

@@ -27,10 +27,11 @@ public class Server {
         while (true) {
             try {
                 // Warte auf Client...
-                Socket client = serverSocket.accept();
+                Socket clientSocket = serverSocket.accept();
                 // ...und erzeuge dann Thread für diesen
-                System.out.println("NEW CLIENT" + client.getPort());
-                new Client(client);
+                System.out.println("New Client: " + clientSocket.getPort());
+                Client clientThread = new Client(clientSocket);
+                clientThread.startClient();
             } catch (Exception e) {
                 System.out.println(e);
             }
