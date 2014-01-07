@@ -2,8 +2,6 @@ package webserver;
 
 import java.io.IOException;
 import java.net.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 class Client extends Thread {
 
@@ -40,9 +38,9 @@ class Client extends Thread {
             }
             
         } catch (IOException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("IOException: " + ex);
         } catch (Exception ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Exception: " + ex);
         }
 
 
