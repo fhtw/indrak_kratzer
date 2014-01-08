@@ -5,6 +5,7 @@ import org.xml.sax.Attributes;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -16,11 +17,10 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 import webserver.PluginControl;
 
-import static webserver.PluginControl.params;
 import webserver.ResponseHandler;
 
 public class NavigationSystem implements PluginControl {
-
+    static Map<String, List<String>> params = new HashMap<>();
     static boolean isBusy = false;
 
     private void showStarterScreen(ResponseHandler respHandle) {
@@ -179,12 +179,13 @@ public class NavigationSystem implements PluginControl {
                     for (String value : entry.getValue()) {
                         switch (value) {
                             case "reloadMap":
-
                                 reloadMap(respHandle);
+                                respHandle.closeStream();
                                 break;
                             case "findLocation":
                                 try {
                                     findLocation(respHandle, incAttributes);
+                                    respHandle.closeStream();
                                 } catch (ParserConfigurationException | SAXException ex) {
                                     System.out.println("SAX Error: " + ex);
                                 }
@@ -192,12 +193,13 @@ public class NavigationSystem implements PluginControl {
                             default:
                                 System.out.println("Unknown action");
                                 showStarterScreen(respHandle);
+                                respHandle.closeStream();
                                 break;
                         }
                     }
+                } else {
+                    showStarterScreen(respHandle);
                     respHandle.closeStream();
-
-
                 }
             }
         }
