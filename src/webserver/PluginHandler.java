@@ -13,30 +13,28 @@ import java.util.Map;
 import java.util.ServiceLoader;
 
 public class PluginHandler {
+
     private ServiceLoader<PluginControl> plugins;
     private Iterator<PluginControl> currentPlugin;
-    List<String> pluginList = new ArrayList<String>();
+    List<String> pluginList = new ArrayList<>();
 
     public void init() throws Exception {
         initPlugins();
     }
-    
-    public List<String> getPluginList()
-    {
+
+    public List<String> getPluginList() {
         currentPlugin = plugins.iterator();
-        while (currentPlugin.hasNext()){
+        while (currentPlugin.hasNext()) {
             pluginList.add(currentPlugin.next().getClass().getSimpleName());
         }
         return pluginList;
     }
-    
-    public boolean runPlugin(String pluginRequest, Map<String, List<String>> incAttributes, String incUrl, Socket socket) throws InterruptedException
-    {
+
+    public boolean runPlugin(String pluginRequest, Map<String, List<String>> incAttributes, String incUrl, Socket socket) throws InterruptedException {
         currentPlugin = plugins.iterator();
-        while (currentPlugin.hasNext()){
+        while (currentPlugin.hasNext()) {
             PluginControl plugin = currentPlugin.next();
-            if (pluginRequest.equalsIgnoreCase(plugin.getClass().getSimpleName()))
-            {
+            if (pluginRequest.equalsIgnoreCase(plugin.getClass().getSimpleName())) {
                 plugin.start(incAttributes, incUrl, socket);
                 return true;
             }
@@ -48,13 +46,16 @@ public class PluginHandler {
         File loc = new File("plugins");
 
         File[] flist = loc.listFiles(new FileFilter() {
-            public boolean accept(File file) {return file.getPath().toLowerCase().endsWith(".jar");}
+            public boolean accept(File file) {
+                return file.getPath().toLowerCase().endsWith(".jar");
+            }
         });
         URL[] urls = new URL[flist.length];
-        for (int i = 0; i < flist.length; i++)
+        for (int i = 0; i < flist.length; i++) {
             urls[i] = flist[i].toURI().toURL();
- 
-            URLClassLoader ucl = new URLClassLoader(urls);
-            plugins = ServiceLoader.load(PluginControl.class, ucl);
+        }
+
+        URLClassLoader ucl = new URLClassLoader(urls);
+        plugins = ServiceLoader.load(PluginControl.class, ucl);
     }
 }

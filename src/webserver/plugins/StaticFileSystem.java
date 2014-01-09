@@ -9,12 +9,6 @@ import java.util.Map;
 import java.util.Set;
 import webserver.PluginControl;
 import webserver.ResponseHandler;
-import javax.swing.text.*;
-import javax.swing.*;
-import java.io.*;
-import java.awt.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 public class StaticFileSystem implements PluginControl {
 
     private String path;
@@ -23,25 +17,10 @@ public class StaticFileSystem implements PluginControl {
     public void start(Map<String, List<String>> incAttributes, String incUrl, Socket socket) {
         System.out.println("Starting StaticFileSystem Plugin");
         ResponseHandler respHandle = new ResponseHandler(socket);
-JEditorPane jep = new JEditorPane( );
-jep.setEditable(false);
-        try {
-            jep.setPage("http://www.google.com");
-        } catch (IOException ex) {
-            Logger.getLogger(StaticFileSystem.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        JScrollPane scrollPane = new JScrollPane(jep);
-JFrame f = new JFrame("O'Reilly & Associates");
-f.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-f.setContentPane(scrollPane);
-f.setSize(512, 342);
-  
-
         if (incAttributes.isEmpty()) {
             try {
                 this.path = ".";
-                if ((!incUrl.isEmpty()) && (incUrl != null)) {
+                if (!incUrl.isEmpty()) {
                     this.path = incUrl;
                 }
 
@@ -107,7 +86,7 @@ f.setSize(512, 342);
         return this.getClass().getName();
     }
 
-    private String getFileUrl(String url) {
+    public String getFileUrl(String url) {
         // Slash "/" wird mit Backslash "\" ersetzt
         url = url.replace('/', File.separator.charAt(0));
         if (url.startsWith(".")) {
@@ -116,7 +95,7 @@ f.setSize(512, 342);
         return url;
     }
 
-    private String getMimeType(String incUrl) {
+    public String getMimeType(String incUrl) {
         if (incUrl.endsWith(".html") || incUrl.endsWith(".htm")) {
             return "text/html";
         } else if (incUrl.endsWith(".txt") || incUrl.endsWith(".java")) {

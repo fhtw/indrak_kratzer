@@ -6,8 +6,6 @@ import java.net.Socket;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import webserver.PluginControl;
 import webserver.ResponseHandler;
@@ -57,7 +55,7 @@ public class TemperatureSystem implements PluginControl {
         }
     }
 
-    private void createDatabase(ResponseHandler respHandle) {
+    public void createDatabase(ResponseHandler respHandle) {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             String connectionUrl = "jdbc:sqlserver://localhost:1433;databaseName=TemperatureSystemDB;user=JulianL;password=Indrak";
@@ -81,7 +79,7 @@ public class TemperatureSystem implements PluginControl {
         }
     }
 
-    private void clearDatabase(ResponseHandler respHandle) {
+    public void clearDatabase(ResponseHandler respHandle) {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             String connectionUrl = "jdbc:sqlserver://localhost:1433;databaseName=TemperatureSystemDB;user=JulianL;password=Indrak";
@@ -209,7 +207,7 @@ public class TemperatureSystem implements PluginControl {
         }
     }
 
-    private void xmlView(ResponseHandler respHandle, String incYear, String incMonth, String incDay) throws ParserConfigurationException {
+    public void xmlView(ResponseHandler respHandle, String incYear, String incMonth, String incDay) throws ParserConfigurationException {
         System.out.println("Info: " + incYear + " " + incMonth + " " + incDay);
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");

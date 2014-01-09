@@ -32,8 +32,8 @@ public class Server {
                 System.out.println("New Client: " + clientSocket.getPort());
                 Client clientThread = new Client(clientSocket);
                 clientThread.startClient();
-            } catch (Exception e) {
-                System.out.println(e);
+            } catch (IOException e) {
+                System.out.println("Error: " + e);
             }
         }
     }

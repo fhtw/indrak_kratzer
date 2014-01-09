@@ -13,7 +13,6 @@ import webserver.ResponseHandler;
 public class RBTSystem implements PluginControl {
 
     static Map<String, String> params = new HashMap<>();
-    static boolean isBusy = false;
     private static String algorithm = "MD5";
 
     private void showStarterScreen(ResponseHandler respHandle) {

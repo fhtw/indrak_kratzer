@@ -99,7 +99,6 @@ public class RequestHandler {
             }
             return true;
         }
-        System.out.println("RETURN FALSE");
         return false;
     }
 

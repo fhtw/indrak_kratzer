@@ -26,10 +26,10 @@ public class UrlHandler {
                 String query = urlParts[1];
                 for (String param : query.split("&")) {
                     String[] pair = param.split("=");
-                    String key = URLDecoder.decode(pair[0], "UTF-8");
+                    String key = URLDecoder.decode(pair[0], "iso-8859-1");
                     String value = "";
                     if (pair.length > 1) {
-                        value = URLDecoder.decode(pair[1], "UTF-8");
+                        value = URLDecoder.decode(pair[1], "iso-8859-1");
                     }
 
                     List<String> values = params.get(key);
